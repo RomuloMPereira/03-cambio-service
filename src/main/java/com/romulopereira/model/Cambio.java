@@ -3,25 +3,45 @@ package com.romulopereira.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+@Entity(name = "cambio")
 public class Cambio implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(name = "from_currency", nullable = false, length = 3)
 	private String from;
+	
+	@Column(name = "to_currency", nullable = false, length = 3)
 	private String to;
-	private BigDecimal convertionFactor;
+	
+	@Column(nullable = false)
+	private BigDecimal conversionFactor;
+	
+	@Transient //Não é persistido na base
 	private BigDecimal convertedValue;
+	
+	@Transient
 	private String environment;
 	
 	public Cambio() {}
 	
-	public Cambio(Long id, String from, String to, BigDecimal convertionFactor, BigDecimal convertedValue,
+	public Cambio(Long id, String from, String to, BigDecimal conversionFactor, BigDecimal convertedValue,
 			String environment) {
 		super();
 		this.id = id;
 		this.from = from;
 		this.to = to;
-		this.convertionFactor = convertionFactor;
+		this.conversionFactor = conversionFactor;
 		this.convertedValue = convertedValue;
 		this.environment = environment;
 	}
@@ -50,12 +70,12 @@ public class Cambio implements Serializable {
 		this.to = to;
 	}
 
-	public BigDecimal getConvertionFactor() {
-		return convertionFactor;
+	public BigDecimal getConversionFactor() {
+		return conversionFactor;
 	}
 
-	public void setConvertionFactor(BigDecimal convertionFactor) {
-		this.convertionFactor = convertionFactor;
+	public void setConversionFactor(BigDecimal conversionFactor) {
+		this.conversionFactor = conversionFactor;
 	}
 
 	public BigDecimal getConvertedValue() {
@@ -79,7 +99,7 @@ public class Cambio implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((convertedValue == null) ? 0 : convertedValue.hashCode());
-		result = prime * result + ((convertionFactor == null) ? 0 : convertionFactor.hashCode());
+		result = prime * result + ((conversionFactor == null) ? 0 : conversionFactor.hashCode());
 		result = prime * result + ((environment == null) ? 0 : environment.hashCode());
 		result = prime * result + ((from == null) ? 0 : from.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -101,10 +121,10 @@ public class Cambio implements Serializable {
 				return false;
 		} else if (!convertedValue.equals(other.convertedValue))
 			return false;
-		if (convertionFactor == null) {
-			if (other.convertionFactor != null)
+		if (conversionFactor == null) {
+			if (other.conversionFactor != null)
 				return false;
-		} else if (!convertionFactor.equals(other.convertionFactor))
+		} else if (!conversionFactor.equals(other.conversionFactor))
 			return false;
 		if (environment == null) {
 			if (other.environment != null)
